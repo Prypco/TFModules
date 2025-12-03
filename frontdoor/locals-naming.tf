@@ -75,7 +75,7 @@ locals {
     r.name => coalesce(
       try(r.custom_resource_name, null),
       format(
-        "%s-%s-%s-cfdr",
+        "%s-%s-%s-cfdroute",
         var.client_name,
         var.environment,
         r.name,
