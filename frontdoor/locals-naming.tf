@@ -19,7 +19,7 @@ locals {
     ep.name => coalesce(
       try(ep.custom_resource_name, null),
       format(
-        "%s-%s-%s-cfdfe",
+        "%s-%s-%s-cfde",
         var.client_name,
         var.environment,
         ep.name,
