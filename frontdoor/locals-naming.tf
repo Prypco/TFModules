@@ -88,11 +88,21 @@ locals {
     for rs in var.rule_sets :
     rs.name => coalesce(
       try(rs.custom_resource_name, null),
-      format(
-        "%s-%s-%s-cfdrs",
-        var.client_name,
-        var.environment,
-        rs.name,
+
+      # Rule sets: 1-60 chars, letters/numbers only
+      substr(
+        regexreplace(
+          format(
+            "%s-%s-%s-cfdrs",
+            var.client_name,
+            var.environment,
+            rs.name,
+          ),
+          "[^0-9A-Za-z]",
+          ""
+        ),
+        0,
+        60
       )
     )
   }
@@ -118,11 +128,19 @@ locals {
     for fp in var.firewall_policies :
     fp.name => coalesce(
       try(fp.custom_resource_name, null),
-      format(
-        "%s-%s-%s-cfdfp",
-        var.client_name,
-        var.environment,
-        fp.name,
+      substr(
+        regexreplace(
+          format(
+            "%s-%s-%s-cfdfp",
+            var.client_name,
+            var.environment,
+            fp.name,
+          ),
+          "[^0-9A-Za-z]",
+          ""
+        ),
+        0,
+        128
       )
     )
   }
