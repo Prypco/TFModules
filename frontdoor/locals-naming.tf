@@ -88,8 +88,6 @@ locals {
     for rs in var.rule_sets :
     rs.name => coalesce(
       try(rs.custom_resource_name, null),
-
-      # Rule sets: 1-60 chars, letters/numbers only
       substr(
         format(
           "%s%s%scfdrs",
@@ -109,12 +107,16 @@ locals {
     for r in local.rules_per_rule_set :
     format("%s.%s", r.rule_set_name, r.name) => coalesce(
       try(r.custom_resource_name, null),
-      format(
-        "%s-%s-%s-%s-cfdr",
-        var.client_name,
-        var.environment,
-        r.rule_set_name,
-        r.name,
+      substr(
+        format(
+          "%s%s%s%scfdr",
+          var.client_name,
+          var.environment,
+          replace(replace(r.rule_set_name, "-", ""), "_", ""),
+          replace(replace(r.name, "-", ""), "_", ""),
+        ),
+        0,
+        260
       )
     )
   }
@@ -129,7 +131,7 @@ locals {
           "%s%s%scfdfp",
           var.client_name,
           var.environment,
-          fp.name,
+          replace(replace(fp.name, "-", ""), "_", ""),
         ),
         0,
         128
