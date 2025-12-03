@@ -3,7 +3,7 @@ resource "azurerm_cdn_frontdoor_rule_set" "main" {
     for rule_set in var.rule_sets : rule_set.name => rule_set
   }
 
-  name = coalesce(each.value.custom_resource_name, data.azurecaf_name.cdn_frontdoor_rule_set[each.key].result)
+  name = coalesce(each.value.custom_resource_name, local.rule_set_names[each.key])
 
   cdn_frontdoor_profile_id = azurerm_cdn_frontdoor_profile.main.id
 }
@@ -18,7 +18,7 @@ resource "azurerm_cdn_frontdoor_rule" "main" {
     for rule in local.rules_per_rule_set : format("%s.%s", rule.rule_set_name, rule.name) => rule
   }
 
-  name = coalesce(each.value.custom_resource_name, data.azurecaf_name.cdn_frontdoor_rule[each.key].result)
+  name = coalesce(each.value.custom_resource_name, local.rule_names[each.key])
 
   cdn_frontdoor_rule_set_id = azurerm_cdn_frontdoor_rule_set.main[each.value.rule_set_name].id
 

@@ -25,7 +25,7 @@ moved {
 resource "azurerm_cdn_frontdoor_endpoint" "main" {
   for_each = try({ for endpoint in var.endpoints : endpoint.name => endpoint }, {})
 
-  name                     = coalesce(each.value.custom_resource_name, data.azurecaf_name.cdn_frontdoor_endpoint[each.key].result)
+  name                     = coalesce(each.value.custom_resource_name, local.endpoint_names[each.key])
   cdn_frontdoor_profile_id = azurerm_cdn_frontdoor_profile.main.id
 
   enabled = each.value.enabled
@@ -41,7 +41,7 @@ moved {
 resource "azurerm_cdn_frontdoor_custom_domain" "main" {
   for_each = try({ for custom_domain in var.custom_domains : custom_domain.name => custom_domain }, {})
 
-  name                     = coalesce(each.value.custom_resource_name, data.azurecaf_name.cdn_frontdoor_custom_domain[each.key].result)
+  name                     = coalesce(each.value.custom_resource_name, local.custom_domain_names[each.key])
   cdn_frontdoor_profile_id = azurerm_cdn_frontdoor_profile.main.id
   dns_zone_id              = each.value.dns_zone_id
   host_name                = each.value.host_name
@@ -64,7 +64,7 @@ moved {
 resource "azurerm_cdn_frontdoor_route" "main" {
   for_each = try({ for route in var.routes : route.name => route }, {})
 
-  name    = coalesce(each.value.custom_resource_name, data.azurecaf_name.cdn_frontdoor_route[each.key].result)
+  name    = coalesce(each.value.custom_resource_name, local.route_names[each.key])
   enabled = each.value.enabled
 
   cdn_frontdoor_endpoint_id     = azurerm_cdn_frontdoor_endpoint.main[each.value.endpoint_name].id
