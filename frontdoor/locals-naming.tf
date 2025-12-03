@@ -96,7 +96,9 @@ locals {
           var.client_name,
           var.environment,
           rs.name,
-        )
+        ),
+        0,
+        60
       )
     )
   }
@@ -128,7 +130,9 @@ locals {
           var.client_name,
           var.environment,
           fp.name,
-        )
+        ),
+        0,
+        128
       )
     )
   }
