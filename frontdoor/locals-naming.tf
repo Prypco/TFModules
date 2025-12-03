@@ -91,18 +91,12 @@ locals {
 
       # Rule sets: 1-60 chars, letters/numbers only
       substr(
-        regexreplace(
-          format(
-            "%s-%s-%s-cfdrs",
-            var.client_name,
-            var.environment,
-            rs.name,
-          ),
-          "[^0-9A-Za-z]",
-          ""
-        ),
-        0,
-        60
+        format(
+          "%s%s%scfdrs",
+          var.client_name,
+          var.environment,
+          rs.name,
+        )
       )
     )
   }
@@ -129,18 +123,12 @@ locals {
     fp.name => coalesce(
       try(fp.custom_resource_name, null),
       substr(
-        regexreplace(
-          format(
-            "%s-%s-%s-cfdfp",
-            var.client_name,
-            var.environment,
-            fp.name,
-          ),
-          "[^0-9A-Za-z]",
-          ""
-        ),
-        0,
-        128
+        format(
+          "%s%s%scfdfp",
+          var.client_name,
+          var.environment,
+          fp.name,
+        )
       )
     )
   }
